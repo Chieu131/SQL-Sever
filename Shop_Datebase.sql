@@ -18,6 +18,14 @@ CREATE TABLE OrderItems (
     FOREIGN KEY (OrderID) REFERENCES Orders(OrderID)
 );
 GO
+CREATE TABLE Product(
+	ProductID  INT PRIMARY KEY,
+	NameProduct NVARCHAR(50),
+	Unit NVARCHAR(10),
+	Price DECIMAL(10, 2),
+	Quantity INT,
+)
+GO
 -- Thêm đơn hàng vào bảng Orders
 INSERT INTO Orders (OrderID, CustomerName, Address, PhoneNumber, OrderDate)
 VALUES (123, N'Nguyễn Văn An', N'111 Nguyễn Trãi, Thanh Xuân, Hà Nội', '987654321', '2009-11-18');
