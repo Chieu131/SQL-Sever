@@ -24,7 +24,10 @@ CREATE TABLE Product(
 	Unit NVARCHAR(10),
 	Price DECIMAL(10, 2),
 	Quantity INT,
+	Item_Status NVARCHAR(20),
 )
+SELECT * FROM Product
+Drop Table Product
 GO
 -- Thêm đơn hàng vào bảng Orders
 INSERT INTO Orders (OrderID, CustomerName, Address, PhoneNumber, OrderDate)
@@ -43,10 +46,10 @@ VALUES (124, N'Trần Thị B', N'222 Lê Duẩn, Hai Bà Trưng, Hà Nội', '1
 GO
 
 -- Thêm các mặt hàng vào bảng OrderItems
-INSERT INTO OrderItems (ItemID, OrderID, ItemName, Description, Unit, Price, Quantity, TotalPrice)
-VALUES (4, 124, N'Máy Tính T460', N'Máy nhập mới', N'Chiếc', 1100, 1, 1100),
-       (5, 124, N'Điện Thoại Nokia5680', N'Điện thoại đang hot', N'Chiếc', 210, 2, 420),
-       (6, 124, N'Máy In Samsung460', N'Máy in đang ế', N'Chiếc', 110, 1, 110);
+INSERT INTO Product(ProductID, NameProduct, Unit, Quantity, Price, Item_Status)
+VALUES (1, N'Máy Tính T460', N'Chiếc',2,110,N'Hết' ),
+       (2, N'Điện Thoại Nokia5680', N'Chiếc', 2, 420,N'còn 3 '),
+       (3, N'Máy In Samsung460', N'Chiếc',2, 110,N'còn hàng cũ');
 GO
 
 -- a) Liệt kê danh sách khách hàng đã mua hàng ở cửa hàng.
