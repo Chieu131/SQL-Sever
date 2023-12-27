@@ -2,6 +2,8 @@
 go
 use LAB12
 go
+DROP DATABASE LAB12
+GO
 -- Tạo bảng Employee
 CREATE TABLE Employee (
     EmployeeID int PRIMARY KEY,
@@ -42,22 +44,57 @@ CREATE TABLE GroupDetail (
 
 GO
 DROP  database LAB12
-INSERT INTO Employee (EmployeeID, Name, Tel, Email)
-VALUES (1, 'Nguyen Van A', '0123456789', 'nva@example.com');
+-- Ví dụ thêm dữ liệu cho bảng Employee
+INSERT INTO Employee (EmployeeID, Name, Tel, Email) VALUES (1, 'Nguyen Van A', '0123456789', 'nva@example.com');
+-- Lặp lại tương tự cho các bảng khác.
 
 Go
+-- a. Hiển thị thông tin của tất cả nhân viên
 SELECT * FROM Employee;
-Go
-SELECT e.Name FROM Employee AS e
-JOIN Project AS p ON e.ProjectID = p.ProjectID
+
+-- b. Liệt kê danh sách nhân viên đang làm dự án “Chính phủ điện tử”
+SELECT e.* FROM Employee e
+JOIN GroupDetail gd ON e.EmployeeID = gd.EmployeeID
+JOIN Group g ON gd.GroupID = g.GroupID
+JOIN Project p ON g.ProjectID = p.ProjectID
 WHERE p.ProjectName = 'Chính phủ điện tử';
 
-Go
-ALTER TABLE Employee 
-MODIFY Name NOT NULL;
+-- c. Thống kê số lượng nhân viên đang làm việc tại mỗi nhóm
+SELECT g.GroupID, COUNT(e.EmployeeID) AS NumberOfEmployees
+FROM Group g
+JOIN GroupDetail gd ON g.GroupID = gd.GroupID
+JOIN Employee e ON gd.EmployeeID = e.EmployeeID
+GROUP BY g.GroupID;
+
+-- d. Liệt kê thông tin cá nhân của các trưởng nhóm
+SELECT e.* FROM Employee e
+JOIN Group g ON e.EmployeeID = g.LeaderID;
+
+-- e. Liệt kê thông tin về nhóm và nhân viên đang làm các dự án có ngày bắt đầu làm trước ngày 12/10/2010
+SELECT g.*, e.* FROM Group g
+JOIN GroupDetail gd ON g.GroupID = gd.GroupID
+JOIN Employee e ON gd.EmployeeID = e.EmployeeID
+JOIN Project p ON g.ProjectID = p.ProjectID
+WHERE p.StartDate < '2010-10-12';
+
+-- f. Liệt kê tất cả nhân viên dự kiến sẽ được phân vào các nhóm làm việc
+SELECT e.* FROM Employee e
+LEFT JOIN GroupDetail gd ON e.EmployeeID = gd.EmployeeID
+WHERE gd.Status = 'sắp làm';
+
+-- g. Liệt kê tất cả thông tin về nhân viên, nhóm làm việc, dự án của những dự án đã hoàn thành
+SELECT e.*, g.*, p.* FROM Employee e
+JOIN GroupDetail gd ON e.EmployeeID = gd.EmployeeID
+JOIN Group g ON gd.GroupID = g.GroupID
+JOIN Project p ON g.ProjectID = p.ProjectID
+WHERE p.EndDate IS NOT NULL;
 
 Go
 
+-- a. Trường tên nhân viên không được null
+ALTER TABLE Employee
+MODIFY Name varchar(100) NOT NULL;
+
+-- b. Trường giá trị dự án phải lớn hơn 1000
 ALTER TABLE Project
-ADD CONSTRAINT CHECK (Cost > 1000);
-
+ADD CONSTRAINT CheckCost CHECK (Cost > 1000);
