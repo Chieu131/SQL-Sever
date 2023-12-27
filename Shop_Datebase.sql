@@ -1,4 +1,7 @@
-﻿CREATE TABLE Orders (
+﻿Create database ShopDatabase
+Use ShopDatabase
+GO
+CREATE TABLE Orders (
     OrderID INT PRIMARY KEY,
     CustomerName NVARCHAR(255),
     Address NVARCHAR(255),
